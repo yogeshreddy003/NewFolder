@@ -1,48 +1,42 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { FaSearch, FaRegHeart, FaShoppingCart, FaRegUserCircle, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaFacebook, FaYoutube } from "react-icons/fa";
+import Footer from '../Footer/Footer';
 
 
 
 const AboutPage = () => {
-    const Navigate = useNavigate();
+    const navigate = useNavigate();
   return (
     <div className="bg-white font-sans">
         <div className="bg-black text-white py-3 text-sm">
-            <div className="container mx-auto flex justify-center items-center px-4">
-                <p className="flex-grow text-center">
-                    Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%! <a href="#" className="font-semibold underline ml-2">ShopNow</a>
-                </p>
-                <div className="flex items-center space-x-1">
-                    
-                    
+                    <div className="container mx-auto flex justify-center items-center px-4">
+                        <p className="flex-grow text-center">
+                            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%! <a href="#" className="font-semibold underline ml-2">ShopNow</a>
+                        </p>
+                        <div className="flex items-center space-x-1">
+                            
+                            
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-      <header className="py-4 px-8 border-b border-gray-200 sticky top-0 bg-white z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <a href="#" className="text-2xl font-bold">Exclusive</a>
-          <nav className="hidden md:flex space-x-8 text-gray-700">
-            <a href="#" className="hover:text-red-500" onClick={()=>Navigate("/home")}>Home</a>
-            <a href="#" className="hover:text-red-500" onClick={()=> Navigate("/contact")}>Contact</a>
-            <a href="#" className="text-red-500 text-decoration-line: underline">About</a>
-          </nav>
-          <div className="flex items-center space-x-4">
-            <div className="hidden lg:block relative">
-              <div className="flex items-center space-x-6">
-                                  <div className="relative">
-                                      <input type="text" placeholder="What are you looking for?" className="bg-gray-100 px-4 py-2 rounded text-sm w-64" />
-                                      <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                                  </div>
-                                  <a href="#"><FaRegHeart size={22} /></a>
-                                  <a href="#"><FaShoppingCart size={22} /></a>
-                                  <a href="#"><FaRegUserCircle size={22} /></a>
-                              </div>
-              
-            </div>
-          </div>
-        </div>
-      </header>
+             
+              <header className="flex justify-between items-center px-6 py-4 shadow">
+                <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
+                <nav className="flex gap-6">
+                  <a href="#" className="hover:text-red-600"  onClick={()=> navigate("/home")}>Home</a>
+                  <a href="#" className="hover:text-red-600"  onClick={() => navigate("/contact")}>Contact</a>
+                  <a href="#" className="text-red-500 text-decoration-line: underline" >About</a>
+                </nav>
+                <div className="flex items-center space-x-6">
+                                    
+                                    <a href="#"><FaRegHeart size={22} /></a>
+                                    <a href="#"><FaShoppingCart size={22} /></a>
+                                    <a href="#"><FaRegUserCircle size={22} onClick={() => navigate("/account")} /></a>
+                                </div>
+              </header>
+        
 
     
       <div className="container mx-auto px-8 py-8 text-sm text-gray-500">
@@ -167,14 +161,7 @@ const AboutPage = () => {
       </section>
 
    
-      <footer className="bg-black text-white py-16 px-8">
-        <div className="container mx-auto grid grid-cols-1 md:grid-cols-5 gap-8">
-      
-        </div>
-        <div className="container mx-auto text-center mt-12 text-gray-400 text-sm border-t border-gray-700 pt-8">
-          © Copyright Exclusive 2025. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

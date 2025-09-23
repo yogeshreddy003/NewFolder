@@ -6,9 +6,9 @@ import './App.css'
 import Product from './keyComponents/ProductDetails/Product'
 import Contact from './keyComponents/ContactUs/Contact'
 import About from './keyComponents/About/About'
-
+import Account from './keyComponents/AccountPage/Account'
 import ProtectedRoute from './keyComponents/ProtectedRoutes'
-
+import AddProduct from './keyComponents/AddProduct/AddProduct'
 
 function App() {
   
@@ -21,7 +21,9 @@ function App() {
         <Route path = "/login" element={<Login></Login>}> </Route>
          <Route path = "/" element={
          <Login></Login>}> </Route>
-         < Route path = "/home" element={<ProtectedRoute><Home/></ProtectedRoute>}> </Route>  
+         <Route path = "/addproduct" element={<ProtectedRoute><AddProduct/></ProtectedRoute>}> </Route>
+         < Route path = "/home" element={<ProtectedRoute><Home/></ProtectedRoute>}> </Route> 
+         < Route path = "/account" element={<ProtectedRoute><Account/></ProtectedRoute>}> </Route>  
          <Route path = "/product" element={<ProtectedRoute><Product/></ProtectedRoute>}> </Route> 
          <Route path = "/contact" element={<ProtectedRoute><Contact/></ProtectedRoute>}> </Route>
       </Routes>

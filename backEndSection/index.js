@@ -1,11 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-
+import router from './routes/userRoute.js';
 import dotenv from 'dotenv';
-import { employmodel, constomermodel } from './models/Employ.js';
+import { employmodel, constomermodel,productmodel } from './models/Schema.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import router01 from './routes/registerRoute.js';
 
 dotenv.config();
 
@@ -14,6 +15,11 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use("/api/user",router)
+app.use("/api/register",router01)
+
+
+
 
 
 
@@ -26,85 +32,38 @@ app.post('/contact', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/addproduct', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        // Destructure the body to easily access and modify values
+        const { name, description, imageUrl, price } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ message: "Please provide all required fields" });
-        }
-
-        const user = await employmodel.findOne({ email });
-        if (!user) {
-            return res.status(400).json({ message: "User not found" });
-        }
-
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (!isPasswordMatch) {
-            return res.status(401).json({ message: "Email or Password is incorrect" });
-        }
-
-        const accessToken = jwt.sign(
-            {
-                user: {
-                    _id: user._id,
-                    name: user.name,
-                    email: user.email
-                }
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1d' }
-        );
-
-        res.json({
-            accessToken,
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email
-            }
-        });
-
-    } catch (err) {
-        res.status(500).json({ message: "chekka" });
-    }
-});
-
-app.post('/signup', async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: "Please provide all required fields" });
-        }
-
-        
-        const existingUser = await employmodel.findOne({ email });
-        if (existingUser) {
-            return res.status(409).json({
-                message: "Email already registered"
-            });
-        }
-
-        
-        const hashPassword = await bcrypt.hash(password, 10);
-
-      
-        const newUser = await employmodel.create({
+        // Create an object with a guaranteed Number type for price
+        const newProduct = {
             name,
-            email,
-            password: hashPassword
-        });
+            description,
+            imageUrl,
+            price: Number(price) // Explicitly convert price to a Number
+        };
 
-        return res.status(201).json({
-            message: "User created successfully",
-            user: newUser
-        });
+        const createdProduct = await productmodel.create(newProduct);
+        res.status(201).json(createdProduct); // Use 201 status for successful creation
+
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
-
+app.get('/api/products', async (req, res) => {
+    try {
+        const products = await productmodel.find();
+        if (!products || products.length === 0) {
+            return res.status(404).json({ msg: 'No products found' });
+        }
+        res.json(products);
+    } catch (err) {
+        console.error('Error fetching products:', err.message);
+        res.status(500).send('Server Error');
+    }
+});
 
 
 

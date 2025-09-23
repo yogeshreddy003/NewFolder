@@ -2,7 +2,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
 
 function SignUp  () {
   const navigate = useNavigate();
@@ -15,10 +14,10 @@ function SignUp  () {
  const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await axios.post("http://localhost:5000/signup", {
-      name,
-      email,
-      password,
+    const res = await fetch("http://localhost:5000/api/register/signup", {
+      method: "POST",
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify({ name,email, password }),
     });
 
     if (res.status === 201) {

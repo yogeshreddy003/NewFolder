@@ -23,7 +23,19 @@ const constomerSchema = new mongoose.Schema({
 });
 
 
+const productSchema = new mongoose.Schema({
+  name: { type: String,
+     required: true },
+  description: { type: String,
+     required: true },
+  price: { type: Number,
+     required: true },
+  imageUrl: { type: String,
+     required: true },
+});
 
+
+const productmodel = mongoose.model('product', productSchema);
 
 
 
@@ -31,4 +43,4 @@ const employmodel = mongoose.model('projecttestings', employSchema);
 const constomermodel = mongoose.model('signup', constomerSchema);
 
 
-export {constomermodel,employmodel};
+export {constomermodel,employmodel,productmodel};

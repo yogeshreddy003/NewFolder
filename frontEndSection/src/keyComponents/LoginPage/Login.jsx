@@ -13,9 +13,9 @@ function Login() {
 
   const loginUser = async (email, password) => {
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch("http://localhost:5000/api/user/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" }, // ✅ fixed casing
+        headers: { "Content-Type": "application/json" }, 
         body: JSON.stringify({ email, password }),
       });
 
@@ -26,8 +26,8 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      // ✅ save JWT in cookies
-      Cookies.set("jwt_token", data.accessToken, { expires: 1 }); // 1 day
+      
+      Cookies.set("jwt_token", data.accessToken, { expires: 1 }); 
 
       setUser(data.user);
       navigate("/home");
@@ -39,7 +39,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // clear old errors
+    setError(""); 
     await loginUser(email, password);
   };
 

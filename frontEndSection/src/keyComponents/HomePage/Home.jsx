@@ -1,11 +1,57 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
-import { FaSearch, FaRegHeart, FaShoppingCart, FaRegUserCircle, FaFacebookF, FaLinkedinIn } from 'react-icons/fa';
-
+import React ,{useState, useEffect} from "react";
+import { useNavigate, } from "react-router-dom";
+import {  FaRegHeart, FaShoppingCart, FaRegUserCircle } from 'react-icons/fa';
+import Footer from "../Footer/Footer";
+import axios from "axios";
 function Home() {
 
      const navigate = useNavigate();
+     const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+     useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                // Fetch from the backend API we created.
+                // Ensure your backend server is running.
+                const response=await axios.get("http://localhost:5000/api/products")
+                const data=response.data
+                setProducts(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+
+     const renderProductGrid = () => {
+        if (isLoading) {
+            return <p className="text-center col-span-full">Loading products...</p>;
+        }
+        if (error) {
+            return <p className="text-center text-red-500 col-span-full">Error: {error}</p>;
+        }
+        if (products.length === 0) {
+            return <p className="text-center col-span-full">No products found.</p>;
+        }
+        return products.map((product) => (
+            <div key={product._id} className="border p-4 rounded-md text-center shadow hover:shadow-lg transition-shadow">
+              <img 
+                src={product.imageUrl} 
+                alt={product.name}
+                className="w-full h-48 object-contain mb-4" 
+                onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/400x400/EEE/31343C?text=Image+Not+Found' }}
+              />
+              <h3 className="font-semibold mt-2 h-12">{product.name}</h3>
+              <p className="text-red-600 font-bold">${product.price.toFixed(2)}</p>
+            </div>
+        ));
+    };
   return (
     <div className="font-sans bg-white text-gray-800">
       <div className="bg-black text-white py-3 text-sm">
@@ -28,13 +74,10 @@ function Home() {
           <a href="#" className="hover:text-red-600"  onClick={()=> navigate("/about")}>About</a>
         </nav>
         <div className="flex items-center space-x-6">
-                            <div className="relative">
-                                <input type="text" placeholder="What are you looking for?" className="bg-gray-100 px-4 py-2 rounded text-sm w-64" />
-                                <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                            </div>
+                            
                             <a href="#"><FaRegHeart size={22} /></a>
                             <a href="#"><FaShoppingCart size={22} /></a>
-                            <a href="#"><FaRegUserCircle size={22} /></a>
+                            <a href="#"><FaRegUserCircle size={22} onClick={() => navigate("/account")} /></a>
                         </div>
       </header>
 
@@ -117,13 +160,7 @@ function Home() {
       <section className="px-6 py-10">
         <h2 className="text-xl font-semibold mb-4">Explore Our Products</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {Array(8).fill("").map((_, i) => (
-            <div key={i} className="border p-4 rounded-md text-center">
-              <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab" alt="Product" />
-              <p className="mt-2">Product Name</p>
-              <p className="text-red-600 font-bold">$150</p>
-            </div>
-          ))}
+          {renderProductGrid()}
         </div>
       </section>
 
@@ -138,49 +175,7 @@ function Home() {
         </div>
       </section>
 
-      <footer className="bg-black text-gray-300 px-6 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-          <div>
-            <h3 className="font-bold text-white mb-2">Exclusive</h3>
-            <p>Subscribe</p>
-            <input
-              type="text"
-              placeholder="Enter your email"
-              className="mt-2 p-2 w-full rounded-md text-black"
-            />
-          </div>
-          <div>
-            <h3 className="font-bold text-white mb-2">Support</h3>
-            <p>111 Bijoy Sarani, Dhaka</p>
-            <p>exclusive@gmail.com</p>
-            <p>+880123456789</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-white mb-2">Account</h3>
-            <p>My Account</p>
-            <p>Login/Register</p>
-            <p>Cart</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-white mb-2">Quick Links</h3>
-            <p>Privacy Policy</p>
-            <p>Terms of Use</p>
-            <p>FAQ</p>
-          </div>
-          <div>
-            <h3 className="font-bold text-white mb-2">Follow Us</h3>
-            <div className="flex gap-4">
-              <FaFacebook />
-              <FaTwitter />
-              <FaInstagram />
-              <FaYoutube />
-            </div>
-          </div>
-        </div>
-        <p className="text-center text-gray-500 mt-6">
-          © Copyright 2025. All Rights Reserved.
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
