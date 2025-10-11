@@ -20,7 +20,7 @@ const navigate = useNavigate();
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/contact', {name, email, phone, message})
+    axios.post('https://newfolder-biza.onrender.com/contact', {name, email, phone, message})
     .then(result => {console.log(result)
 navigate("/login")})
       .catch(err => console.log(err));
