@@ -19,6 +19,7 @@ const employSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const User = mongoose.model("User", employSchema);
+// ✅ Prevent model overwrite error
+const User = mongoose.models.User || mongoose.model("User", employSchema);
 
-export default User;   // ✅ THIS LINE WAS MISSING
+export default User;
