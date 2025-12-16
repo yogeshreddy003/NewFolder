@@ -85,7 +85,7 @@ export const login = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const user = await employmodel.findById(req.user._id);
+    const user = await User.findById(req.user._id);
 
     if (user) {
       // Combine first and last name from the form
