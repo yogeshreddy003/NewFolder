@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
-import Customer from "./models/customer.js";
+import customer from "./models/customer.js";
 
 
 dotenv.config();
@@ -55,7 +55,7 @@ app.use("/api/cart", productLimiter, cartRoutes);
 // ** 6. CONTACT ENDPOINT **
 app.post("/api/contact", contactLimiter, async (req, res) => {
   try {
-    const contact = await Customer.create(req.body);
+    const contact = await customer.create(req.body);
     res.status(201).json({
       message: "Contact message received",
       data: contact,
