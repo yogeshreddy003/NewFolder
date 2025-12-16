@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { employmodel } from "../models/Schema.js";
+import { employmodel } from "../models/employmodel.js";
 
 const protect = async (req, res, next) => {
   let token;

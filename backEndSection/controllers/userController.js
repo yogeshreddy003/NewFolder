@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
+import { employmodel } from "../models/employmodel.js";
 
 export const signup = async (req, res) => {
   try {
@@ -12,7 +12,7 @@ export const signup = async (req, res) => {
         .json({ message: "Please provide all required fields" });
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await employmodel.findOne({ email });
     if (existingUser) {
       return res.status(409).json({
         message: "Email already registered",
@@ -21,7 +21,7 @@ export const signup = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({
+    const newUser = await employmodel.create({
       name,
       email,
       password: hashPassword,
@@ -46,7 +46,7 @@ export const login = async (req, res) => {
         .json({ message: "Please provide all required fields" });
     }
 
-    const user = await User.findOne({ email });
+    const user = await employmodel.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -85,7 +85,7 @@ export const login = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await employmodel.findById(req.user._id);
 
     if (user) {
       // Combine first and last name from the form
