@@ -1,12 +1,13 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {  FaRegHeart, FaShoppingCart, FaRegUserCircle } from 'react-icons/fa';
+import {  FaRegHeart, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
 import { IoCallOutline, IoMailOutline,  } from "react-icons/io5";
-
-
+import Cookies from 'js-cookie';
 import Footer from '../Footer/Footer';
+import CartContext from '../Cart/CartContext';
+
 
 
 
@@ -17,6 +18,9 @@ const [email, setEmail] = useState();
 const [phone, setPhone] = useState();
 const [message, setMessage] = useState();
 const navigate = useNavigate();
+const { cart } = useContext(CartContext); // Use the context
+    const cartItemCount = cart ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,7 +28,15 @@ const handleSubmit = (e) => {
     .then(result => {console.log(result)
 navigate("/login")})
       .catch(err => console.log(err));
-}               
+}  
+
+const handleLogout = () => {
+        // Remove the authentication token cookie
+        Cookies.remove('jwt_token');
+        // Redirect the user to the login page
+        navigate('/login');
+      };
+
 
 
     return (
@@ -51,8 +63,30 @@ navigate("/login")})
                     <div className="flex items-center space-x-6">
                                         
                                         <a href="#"><FaRegHeart size={22} /></a>
-                                        <a href="#"><FaShoppingCart size={22} /></a>
-                                        <a href="#"><FaRegUserCircle size={22} onClick={() => navigate("/account")} /></a>
+                                        <a href="#" className='relative' onClick={()=> navigate("/cart")}>
+                                        <FaShoppingCart size={22} />
+                                        {cartItemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {cartItemCount}
+                    </span>
+                    )}
+                    </a>
+                                        <svg 
+                                                                xmlns="http://www.w3.org/2000/svg" 
+                                                                fill="none" 
+                                                                viewBox="0 0 24 24" 
+                                                                strokeWidth="1.5" // Changed stroke-width to strokeWidth
+                                                                stroke="currentColor" 
+                                                                onClick={() => navigate("/account")} 
+                                                                className="hover:text-red-600 size-6 cursor-pointer" // Changed class to className and added cursor-pointer
+                                                            >
+                                                                <path 
+                                                                    strokeLinecap="round" // Changed stroke-linecap to strokeLinecap
+                                                                    strokeLinejoin="round" // Changed stroke-linejoin to strokeLinejoin
+                                                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" 
+                                                                />
+                                                            </svg>
+                                                            <a onClick={handleLogout} className="hover:text-red-600"  href='#'><FaSignOutAlt size = {24}/> <a className='text-sm p-2 hover:text-red-600'>Logout</a> </a>
                                     </div>
                   </header>
 

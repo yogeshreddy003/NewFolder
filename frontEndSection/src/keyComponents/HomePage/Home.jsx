@@ -70,41 +70,68 @@ function Home() {
             </div>
      
             <header className="flex justify-between items-center px-6 py-4 shadow">
-                <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
-                <nav className="flex gap-6">
-                    <a href="#" className="text-red-500 text-decoration-line: underline">Home</a>
-                    <a href="#" className="hover:text-red-600" onClick={() => navigate("/contact")}>Contact</a>
-                    <a href="#" className="hover:text-red-600" onClick={() => navigate("/about")}>About</a>
-                </nav>
-                <div className="flex items-center space-x-6">
-                    <a href="#"><FaRegHeart size={22} /></a>
-                    <a href="#" className="relative" onClick={() => navigate("/cart")}> {/* Make cart icon clickable */}
-            <FaShoppingCart size={22} />
-            {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {cartItemCount}
-                </span>
-            )}
-        </a>
-                    {/* FIXED SVG ATTRIBUTES HERE */}
-                    <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        strokeWidth="1.5" // Changed stroke-width to strokeWidth
-                        stroke="currentColor" 
-                        onClick={() => navigate("/account")} 
-                        className="hover:text-red-600 size-6 cursor-pointer" // Changed class to className and added cursor-pointer
-                    >
-                        <path 
-                            strokeLinecap="round" // Changed stroke-linecap to strokeLinecap
-                            strokeLinejoin="round" // Changed stroke-linejoin to strokeLinejoin
-                            d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" 
-                        />
-                    </svg>
-                    <a onClick={handleLogout} className="hover:text-red-600"  href='#'><FaSignOutAlt size = {24}/> <a className='text-sm p-2 hover:text-red-600'>Logout</a> </a>
-                </div>
-            </header>
+  <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
+
+  {/* NAVIGATION */}
+  <nav className="flex gap-6">
+    <Link to="/" className="text-red-500 underline">Home</Link>
+    <Link to="/contact" className="hover:text-red-600">Contact</Link>
+    <Link to="/about" className="hover:text-red-600">About</Link>
+  </nav>
+
+  {/* ICONS & ACTIONS */}
+  <div className="flex items-center space-x-6">
+    
+    {/* Wishlist */}
+    <button className="hover:text-red-600">
+      <FaRegHeart size={22} />
+    </button>
+
+    {/* Cart */}
+    <button
+      className="relative hover:text-red-600"
+      onClick={() => navigate("/cart")}
+    >
+      <FaShoppingCart size={22} />
+      {cartItemCount > 0 && (
+        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          {cartItemCount}
+        </span>
+      )}
+    </button>
+
+    {/* Account */}
+    <button
+      onClick={() => navigate("/account")}
+      className="hover:text-red-600"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth="1.5"
+        stroke="currentColor"
+        className="size-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0"
+        />
+      </svg>
+    </button>
+
+    {/* LOGOUT (FIXED) */}
+    <button
+      onClick={handleLogout}
+      className="flex items-center gap-2 hover:text-red-600"
+    >
+      <FaSignOutAlt size={22} />
+      <span className="text-sm">Logout</span>
+    </button>
+  </div>
+</header>
+
 
             <section className="bg-gray-100 flex justify-between items-center p-10">
                 <div>
@@ -172,7 +199,7 @@ function Home() {
                         </button>
                     </div>
                     <img
-                        src="https://via.placeholder.com/300x200"
+                        src="https://img.freepik.com/free-photo/laptop-shopping-bags-online-shopping-concept_1423-189.jpg?semt=ais_hybrid&w=740&q=80"
                         alt="Promo"
                         className="rounded-md"
                     />
