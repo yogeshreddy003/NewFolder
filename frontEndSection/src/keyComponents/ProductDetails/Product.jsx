@@ -7,8 +7,8 @@ import {
 } from 'react-icons/fa';
 import { FiEye } from 'react-icons/fi';
 import { TbTruckDelivery, TbReload } from "react-icons/tb";
-import Footer from '../Footer/Footer';
-import CartContext from '../Cart/CartContext';
+import Footer from "../../components/Footer.jsx";
+import CartContext from '../../context/CartContext.jsx';
 
 // StarRating and ProductCard components unchanged — include them here or import if you have them separated
 const StarRating = ({ rating = 0, reviewCount = 0 }) => {

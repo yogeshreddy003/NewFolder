@@ -2,16 +2,15 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import HomePage from "./pages/HomePage";
-import ProductPage from "./pages/ProductPage";
-import CartPage from "./pages/CartPage";
-import AddProductPage from "./pages/AddProductPage";
-import AccountPage from "./pages/AccountPage";
-import ContactPage from "./pages/ContactPage";
-import AboutPage from "./pages/AboutPage";
-
+import About from "./keyComponents/About/About.jsx";
+import Account from "./keyComponents/AccountPage/Account.jsx";
+import AddProduct from "./keyComponents/AddProduct/AddProduct.jsx";
+import Cart from "./keyComponents/CartPage/CartPage.jsx";
+import Contact from "./keyComponents/ContactUs/Contact.jsx";
+import HomePage from "./keyComponents/HomePage/Home.jsx";
+import LoginPage from "./keyComponents/LoginPage/Login.jsx";
+import ProductDetails from "./keyComponents/ProductDetails/Product.jsx";
+import SignupPage from "./keyComponents/SignupPage/Signup.jsx";
 import "./styles/App.css";
 
 function App() {
@@ -32,7 +31,7 @@ function App() {
         path="/product/:id"
         element={
           <ProtectedRoute>
-            <ProductPage />
+            <ProductDetails/>
           </ProtectedRoute>
         }
       />
@@ -40,7 +39,7 @@ function App() {
         path="/cart"
         element={
           <ProtectedRoute>
-            <CartPage />
+            <Cart />
           </ProtectedRoute>
         }
       />
@@ -48,7 +47,7 @@ function App() {
         path="/addproduct"
         element={
           <ProtectedRoute>
-            <AddProductPage />
+            <AddProduct />
           </ProtectedRoute>
         }
       />
@@ -56,7 +55,7 @@ function App() {
         path="/account"
         element={
           <ProtectedRoute>
-            <AccountPage />
+            <Account />
           </ProtectedRoute>
         }
       />
@@ -64,7 +63,7 @@ function App() {
         path="/contact"
         element={
           <ProtectedRoute>
-            <ContactPage />
+            <Contact />
           </ProtectedRoute>
         }
       />
@@ -72,7 +71,7 @@ function App() {
         path="/about"
         element={
           <ProtectedRoute>
-            <AboutPage />
+            <About />
           </ProtectedRoute>
         }
       />

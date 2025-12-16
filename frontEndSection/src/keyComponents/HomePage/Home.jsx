@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Cookies from 'js-cookie';
 import { FaRegHeart, FaShoppingCart,FaSignOutAlt } from 'react-icons/fa';
-import Footer from "../Footer/Footer";
-import CartContext from "../Cart/CartContext";
+import Footer from "../../components/Footer.jsx";
+import CartContext from "../../context/CartContext.jsx";
 import axios from "axios";
 
 function Home() {
@@ -15,18 +15,20 @@ function Home() {
     const cartItemCount = cart ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get("https://newfolder-biza.onrender.com/api/products");
-                setProducts(response.data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchProducts();
-    }, []);
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get("https://newfolder-biza.onrender.com/api/products");
+            // If backend returns { success: true, data: [...] }, use response.data.data
+            const productData = response.data.data || response.data; 
+            setProducts(productData);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    fetchProducts();
+}, []);
     
     const renderProductGrid = () => {
         if (isLoading) {

@@ -1,9 +1,11 @@
 import React ,{  useContext} from 'react';
 import { useNavigate } from "react-router-dom";
 import {  FaRegHeart, FaShoppingCart, FaSignOutAlt  } from 'react-icons/fa';
-import Footer from '../Footer/Footer';
-import CartContext from "../Cart/CartContext";
+
+
 import Cookies from 'js-cookie';
+import Footer from "../../components/Footer.jsx";
+import CartContext from '../../context/CartContext.jsx';
 
 
 const AboutPage = () => {

@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {  FaRegHeart, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
 import { IoCallOutline, IoMailOutline,  } from "react-icons/io5";
 import Cookies from 'js-cookie';
-import Footer from '../Footer/Footer';
-import CartContext from '../Cart/CartContext';
+import Footer from "../../components/Footer.jsx";
+import CartContext from '../../context/CartContext.jsx';
 
 
 

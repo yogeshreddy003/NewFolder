@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import CartContext from "../Cart/CartContext";
-import Footer from "../Footer/Footer";
+import CartContext from "../../context/CartContext.jsx";
+import Footer from "../../components/Footer.jsx";
 import { FaTrash, FaRegHeart, FaSignOutAlt } from "react-icons/fa";
 import Cookies from "js-cookie";
 

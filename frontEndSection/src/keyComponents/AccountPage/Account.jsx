@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios'; // 1. IMPORT AXIOS
 
 import { FaRegHeart, FaShoppingCart,FaSignOutAlt } from 'react-icons/fa';
-import Footer from '../Footer/Footer';
+import Footer from "../../components/Footer.jsx";
 
 export default function EditProfile() {
   const [form, setForm] = useState({
@@ -93,7 +93,7 @@ export default function EditProfile() {
           body.currentPassword = form.currentPassword;
       }
 
-      const { data } = await axios.put(
+      await axios.put(
         'https://newfolder-biza.onrender.com/api/user/profile',
         body,
         config

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {  FaRegHeart, FaShoppingCart, FaRegUserCircle } from 'react-icons/fa';
-import Footer from '../Footer/Footer';
+import Footer from "../../components/Footer.jsx";
 const AddProduct = () => {
     const [name, setName] =useState();
     const [price, setPrice] = useState();
