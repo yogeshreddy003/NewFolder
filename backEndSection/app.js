@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
-import Customer from "./models/Customer.js";
+import Customer from "./models/customer.js";
 
 dotenv.config();
 
