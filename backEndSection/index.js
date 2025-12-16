@@ -8,6 +8,7 @@ import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import Customer from "./models/customer.js";
 
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
