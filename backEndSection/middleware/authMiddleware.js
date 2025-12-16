@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { employmodel } from "../models/Schema.js";
+import User from "../models/User.js";
 
 const protect = async (req, res, next) => {
   let token;
@@ -11,7 +11,7 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-      req.user = await employmodel.findById(decoded.user._id).select("-password");
+      req.user = await User.findById(decoded.user._id).select("-password");
       
       next();
     } catch (error) {
