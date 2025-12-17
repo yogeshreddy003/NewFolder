@@ -11,7 +11,7 @@ import Customer from "./models/Customer.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+
 const app = express();
 
 // ** 1. DEFINE YOUR FRONTEND'S URL **
@@ -56,6 +56,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 // ** 5. ROUTES **
+app.use("/api/user", userRoutes)
 app.use("/api/user", authLimiter, userRoutes);
 app.use("/api/products", productLimiter, productRoutes);
 app.use("/api/cart", productLimiter, cartRoutes);
@@ -75,12 +76,10 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
 
 // ** 7. DATABASE CONNECTION **
 mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => console.log("✓ MongoDB connected"))
-  .catch((err) => console.error("✗ MongoDB connection error:", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
 
-// ** 8. START SERVER **
-app.listen(PORT, () => {
-  console.log(`✓ Server started on port ${PORT}`);
-  console.log(`✓ Frontend URL: ${frontendURL}`);
-});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));  
