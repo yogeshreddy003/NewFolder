@@ -1,5 +1,5 @@
 import express from 'express';
-
+import { protect } from '../middleware/authMiddleware.js';
 // Corrected import statement for all controller functions
 import {
   getAllProducts,
@@ -34,20 +34,9 @@ router.get('/:id', getProductById);
 
 // --- Private/Admin Routes (Would typically have an authentication/authorization middleware here) ---
 
-// POST /api/products
-// Creates a new product
-// Access: Private/Admin
-router.post('/', createProduct);
 
-// PUT /api/products/:id
-// Updates an existing product
-// Access: Private/Admin
-router.put('/:id', updateProduct);
-
-// DELETE /api/products/:id
-// Deletes a product
-// Access: Private/Admin
-router.delete('/:id', deleteProduct);
-
+router.post('/', protect, createProduct);    // Add protect here
+router.put('/:id', protect, updateProduct);   // Add protect here
+router.delete('/:id', protect, deleteProduct); // Add protect here
 
 export default router;

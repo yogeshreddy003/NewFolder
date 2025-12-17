@@ -63,7 +63,30 @@ const Product = () => {
   const [quantity, setQuantity] = useState(1);
 
   // use context
-  const { addToCart, showSuccess, fetchCart } = useContext(CartContext);
+  const cartContext = useContext(CartContext) || {};
+  const {  showSuccess, fetchCart } = cartContext;
+  const addToCart = async (productId, quantity) => {
+  try {
+    const token = localStorage.getItem('token'); // Check if user is logged in
+    if (!token) return false;
+
+    const response = await axios.post('YOUR_API_URL/cart', 
+      { productId, quantity },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (response.status === 200 || response.status === 201) {
+      showSuccess(true);
+      setTimeout(() => showSuccess(false), 3000);
+      return true; // This MUST return true for your Product.jsx handleAddToCart to work
+    }
+    return false;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -73,7 +96,7 @@ const Product = () => {
       try {
         setLoading(true);
         const response = await axios.get(`https://newfolder-biza.onrender.com/api/products/${id}`);
-        setProduct(response.data);
+        setProduct(response.data.data);
         setError('');
       } catch (err) {
         setError('Failed to fetch product data. Please try again.');
@@ -88,15 +111,27 @@ const Product = () => {
 
   // Optionally refresh cart after adding
   const handleAddToCart = async () => {
-    if (!product || !product._id) return;
+    // 1. Check if product exists
+    if (!product || !product._id) {
+      console.error("Product ID missing");
+      return;
+    }
+
+    // 2. Check if context is available
+    if (typeof addToCart !== 'function') {
+      console.error("CartContext is not providing addToCart function");
+      return;
+    }
+
     const success = await addToCart(product._id, quantity);
+    
     if (success) {
-      // optionally refresh cart data (if needed)
+      // Logic for success (refreshing cart)
       if (typeof fetchCart === 'function') fetchCart();
     } else {
-      // if failed due to not logged in, navigate to login (optional)
-      // you can show a nicer modal/toast here instead
-      alert('Failed to add to cart. Please login and try again.');
+      // Logic for failure (usually authentication)
+      alert('Please login to add items to your cart.');
+      navigate('/login'); 
     }
   };
 
@@ -151,7 +186,7 @@ const Product = () => {
       <main className="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 px-4 py-10">
         <div className="flex justify-center p-4">
           <div className="bg-gray-100 flex items-center justify-center rounded p-4 h-[500px] w-full">
-            <img src={product.imageUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
+            <img src={product?.imageUrl} alt={product?.name} className="max-w-full max-h-full object-contain" />
           </div>
         </div>
 
@@ -162,7 +197,7 @@ const Product = () => {
             <span className="text-gray-400">|</span>
             <span className="text-green-600">In Stock</span>
           </div>
-          <p className="text-3xl font-light mb-6">${product.price.toFixed(2)}</p>
+          <p className="text-3xl font-light mb-6">₹{Number(product?.price ?? 0).toFixed(2)}</p>
           <p className="text-gray-600 border-b pb-6">{product.description}</p>
 
           <div className="flex items-center space-x-4 my-6">
