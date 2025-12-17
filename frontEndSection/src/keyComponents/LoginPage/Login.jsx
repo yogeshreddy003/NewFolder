@@ -25,7 +25,7 @@ function Login() {
       }
 
       
-      Cookies.set("jwt_token", data.accessToken, { expires: 1 }); 
+      Cookies.set("jwt_token", data.token, { expires: 1 }); 
 
       navigate("/home");
     } catch (err) {

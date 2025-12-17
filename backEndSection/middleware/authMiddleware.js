@@ -20,11 +20,11 @@ export const protect = async (req, res, next) => {
     req.user = await User.findById(decoded.id).select("-password");
 
     if (!req.user) {
-      return res.status(401).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Token invalid" });
+    return res.status(401).json({ message: "Token is invalid or expired" });
   }
 };
