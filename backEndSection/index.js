@@ -57,7 +57,7 @@ app.use(cors(corsOptions));
 
 // ** 5. ROUTES **
 app.use("/api/user", userRoutes)
-app.use("/api/user", authLimiter, userRoutes);
+
 app.use("/api/products", productLimiter, productRoutes);
 app.use("/api/cart", productLimiter, cartRoutes);
 
@@ -76,7 +76,7 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
 
 // ** 7. DATABASE CONNECTION **
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.mongodb_url)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error(err));
 

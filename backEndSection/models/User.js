@@ -10,12 +10,7 @@ password: {
   required: true,
   select: false // This hides it from queries by default
 },
-    address: { type: String, default: "" },
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user",
-    },
+    
   },
   { timestamps: true }
 );
