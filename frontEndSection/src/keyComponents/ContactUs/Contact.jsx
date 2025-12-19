@@ -24,7 +24,7 @@ const { cart } = useContext(CartContext); // Use the context
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://newfolder-biza.onrender.com/contact', {name, email, phone, message})
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/contact`, {name, email, phone, message})
     .then(result => {console.log(result)
 navigate("/login")})
       .catch(err => console.log(err));

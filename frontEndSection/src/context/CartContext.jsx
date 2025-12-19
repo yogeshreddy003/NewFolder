@@ -9,7 +9,7 @@ import Cookies from "js-cookie";
 
 const CartContext = createContext();
 
-const API_URL = "https://newfolder-biza.onrender.com/api/cart";
+const API_URL = `${import.meta.env.VITE_BACKEND_URL}/api/cart`;
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [] });

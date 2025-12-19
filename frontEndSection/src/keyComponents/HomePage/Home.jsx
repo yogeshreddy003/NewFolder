@@ -17,7 +17,7 @@ function Home() {
     useEffect(() => {
     const fetchProducts = async () => {
         try {
-            const response = await axios.get("https://newfolder-biza.onrender.com/api/products");
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products`);
             // If backend returns { success: true, data: [...] }, use response.data.data
             const productData = response.data.data || response.data; 
             setProducts(productData);
@@ -102,7 +102,6 @@ function Home() {
       )}
     </button>
 
-    {/* Account */}
     <button
       onClick={() => navigate("/account")}
       className="hover:text-red-600"
@@ -123,7 +122,7 @@ function Home() {
       </svg>
     </button>
 
-    {/* LOGOUT (FIXED) */}
+   
     <button
       onClick={handleLogout}
       className="flex items-center gap-2 hover:text-red-600"

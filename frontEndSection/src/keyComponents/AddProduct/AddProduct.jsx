@@ -12,7 +12,7 @@ const AddProduct = () => {
 
     const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('https://newfolder-biza.onrender.com/addproduct', {name,price , description, imageUrl})
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/addproduct`, {name,price , description, imageUrl})
     .then(result => {console.log(result)
 navigate("/home")})
       .catch(err => console.log(err));

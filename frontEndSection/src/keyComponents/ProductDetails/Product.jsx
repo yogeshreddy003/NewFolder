@@ -10,7 +10,7 @@ import { TbTruckDelivery, TbReload } from "react-icons/tb";
 import Footer from "../../components/Footer.jsx";
 import CartContext from '../../context/CartContext.jsx';
 
-// StarRating and ProductCard components unchanged — include them here or import if you have them separated
+
 const StarRating = ({ rating = 0, reviewCount = 0 }) => {
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -74,7 +74,7 @@ const Product = () => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://newfolder-biza.onrender.com/api/products/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`);
         setProduct(response.data.data);
         setError('');
       } catch (err) {

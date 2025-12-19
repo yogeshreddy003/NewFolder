@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios'; // 1. IMPORT AXIOS
+import axios from 'axios'; 
 
 import { FaRegHeart, FaShoppingCart,FaSignOutAlt } from 'react-icons/fa';
 import Footer from "../../components/Footer.jsx";
@@ -58,13 +58,13 @@ export default function EditProfile() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 3. IMPLEMENT THE SUBMIT HANDLER
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
     setError('');
 
-    // Password confirmation check
+   
     if (form.newPassword && form.newPassword !== form.confirmNewPassword) {
       setError("New passwords do not match.");
       return;
@@ -94,7 +94,7 @@ export default function EditProfile() {
       }
 
       await axios.put(
-        'https://newfolder-biza.onrender.com/api/user/profile',
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
         body,
         config
       );
