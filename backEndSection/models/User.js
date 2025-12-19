@@ -4,11 +4,11 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    // Inside your User Schema
+    
 password: {
   type: String,
   required: true,
-  select: false // This hides it from queries by default
+  select: false 
 },
     
   },

@@ -46,8 +46,6 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    // Use .select("+password") if your schema has password: { select: false }
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -71,16 +69,16 @@ export const login = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    // req.user._id comes from your auth middleware
+    
     const user = await User.findById(req.user.id);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Update fields
+    
     if (req.body.name) user.name = req.body.name;
     if (req.body.address) user.address = req.body.address;
 
-    // Password Update Logic
+    
     if (req.body.newPassword) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(req.body.newPassword, salt);

@@ -22,17 +22,15 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      // --- THE FIX IS HERE ---
-      // 1. Store in Cookies (for your existing auth checks)
+      
       Cookies.set("jwt_token", data.accessToken, { expires: 1 });
 
-      // 2. Store in LocalStorage (so your Cart logic can find it using localStorage.getItem('token'))
-      localStorage.setItem("token", data.accessToken);
-      // -----------------------
+      
+      
 
       navigate("/home");
     } catch (err) {
-      alert(err.message); // Added an alert so you see what went wrong
+      alert(err.message); 
       console.error("Login error:", err.message);
     }
   };
@@ -45,7 +43,7 @@ function Login() {
   useEffect(() => {
     const token = Cookies.get("jwt_token");
     if (token) {
-      // Ensure localStorage is also synced if cookie exists
+      
       localStorage.setItem("token", token);
       navigate("/home");
     }
@@ -64,7 +62,7 @@ function Login() {
       <div className="flex w-full md:w-1/2 justify-center items-center p-8">
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6">Log in to Exclusive</h2>
-          <form onSubmit={handleSubmit} className="space-y-4"> {/* Use onSubmit here */}
+          <form onSubmit={handleSubmit} className="space-y-4"> 
             <input
               type="email"
               placeholder="Email"

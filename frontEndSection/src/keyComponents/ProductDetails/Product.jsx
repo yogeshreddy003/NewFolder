@@ -64,28 +64,7 @@ const Product = () => {
 
   // use context
   const cartContext = useContext(CartContext) || {};
-  const {  showSuccess, fetchCart } = cartContext;
-  const addToCart = async (productId, quantity) => {
-  try {
-    const token = localStorage.getItem('token'); // Check if user is logged in
-    if (!token) return false;
-
-    const response = await axios.post('YOUR_API_URL/cart', 
-      { productId, quantity },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    if (response.status === 200 || response.status === 201) {
-      showSuccess(true);
-      setTimeout(() => showSuccess(false), 3000);
-      return true; // This MUST return true for your Product.jsx handleAddToCart to work
-    }
-    return false;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
-};
+  const { addToCart, showSuccess, fetchCart } = cartContext;
 
 
   const { id } = useParams();
@@ -111,27 +90,15 @@ const Product = () => {
 
   // Optionally refresh cart after adding
   const handleAddToCart = async () => {
-    // 1. Check if product exists
-    if (!product || !product._id) {
-      console.error("Product ID missing");
-      return;
-    }
-
-    // 2. Check if context is available
-    if (typeof addToCart !== 'function') {
-      console.error("CartContext is not providing addToCart function");
-      return;
-    }
-
+    if (!product || !product._id) return;
     const success = await addToCart(product._id, quantity);
-    
     if (success) {
-      // Logic for success (refreshing cart)
+      // optionally refresh cart data (if needed)
       if (typeof fetchCart === 'function') fetchCart();
     } else {
-      // Logic for failure (usually authentication)
-      alert('Please login to add items to your cart.');
-      navigate('/login'); 
+      // if failed due to not logged in, navigate to login (optional)
+      // you can show a nicer modal/toast here instead
+      alert('Failed to add to cart. Please login and try again.');
     }
   };
 
