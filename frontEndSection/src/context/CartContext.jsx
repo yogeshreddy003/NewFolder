@@ -31,7 +31,7 @@ export const CartProvider = ({ children }) => {
 
     return { 
       headers: { 
-        Authorization: `Bearer ${token.replace(/^"|"$/g, '')}` // Removes quotes if they exist
+        Authorization: `Bearer ${token.replace(/^"|"$/g, '')}` 
       } 
     };
   };
@@ -50,11 +50,7 @@ export const CartProvider = ({ children }) => {
       setCart(response.data.data || response.data || { items: [] });
     } catch (err) {
       console.error("Fetch cart failed:", err);
-      if (err.response?.status === 401) {
-          // Token expired or invalid
-          localStorage.removeItem("token");
-          Cookies.remove("jwt_token");
-      }
+      
       setCart({ items: [] });
     } finally {
       setLoading(false);

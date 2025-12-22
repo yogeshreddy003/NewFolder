@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -9,11 +9,14 @@ function Login() {
 
   const loginUser = async (email, password) => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json();
       console.log("Login response:", data);
@@ -22,32 +25,23 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      
-      Cookies.set("jwt_token", data.accessToken, { expires: 1 });
-
-      
-      
+      // ✅ STORE CORRECT TOKEN
+      Cookies.set("jwt_token", data.token, {
+        path: "/",
+        expires: 1,
+      });
 
       navigate("/home");
     } catch (err) {
-      alert(err.message); 
+      alert(err.message);
       console.error("Login error:", err.message);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await loginUser(email, password);
+    loginUser(email, password);
   };
-
-  useEffect(() => {
-    const token = Cookies.get("jwt_token");
-    if (token) {
-      
-      localStorage.setItem("token", token);
-      navigate("/home");
-    }
-  }, [navigate]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -62,23 +56,26 @@ function Login() {
       <div className="flex w-full md:w-1/2 justify-center items-center p-8">
         <div className="w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6">Log in to Exclusive</h2>
-          <form onSubmit={handleSubmit} className="space-y-4"> 
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full p-3 border rounded-lg"
               required
             />
+
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full p-3 border rounded-lg"
               required
             />
+
             <button
               type="submit"
               className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"

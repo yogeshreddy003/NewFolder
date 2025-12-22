@@ -25,34 +25,52 @@ export default function EditProfile() {
 
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Remove the authentication token cookie
-    Cookies.remove('jwt_token');
-    // Redirect the user to the login page
-    navigate('/login');
-  };
+  
 
   useEffect(() => {
-    const token = Cookies.get('jwt_token');
-    if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        const currentUser = decodedToken.user;
-        const [firstName = '', lastName = ''] = currentUser.name.split(' ');
+  const token = Cookies.get("jwt_token");
 
-        setForm(prevForm => ({
-          ...prevForm,
-          firstName,
-          lastName,
-          email: currentUser.email,
-          // We will fetch address separately or assume it's not in the token
-        }));
-      } catch (error) {
-        console.error("Failed to decode token:", error);
-        navigate('/login');
-      }
+  // ❌ No token at all
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  // ❌ Token exists but is NOT a valid JWT format
+  if (token.split(".").length) {
+    console.error("Invalid JWT format:", token);
+    Cookies.remove("jwt_token");
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const decoded = jwtDecode(token);
+
+    const user = decoded.user || decoded;
+
+    if (!user?.email) {
+      throw new Error("Invalid token payload");
     }
-  }, [navigate]);
+
+    const fullName = user.name || "";
+    const [firstName = "", lastName = ""] = fullName.split(" ");
+
+    setForm(prev => ({
+      ...prev,
+      firstName,
+      lastName,
+      email: user.email
+    }));
+
+  } catch (err) {
+    console.error("Token decode failed:", err);
+    Cookies.remove("jwt_token");
+    navigate("/login");
+  }
+}, []);
+
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -87,7 +105,7 @@ export default function EditProfile() {
           address: form.address,
       };
 
-      // Only include password fields if a new password is provided
+      
       if (form.newPassword && form.currentPassword) {
           body.newPassword = form.newPassword;
           body.currentPassword = form.currentPassword;
@@ -100,7 +118,7 @@ export default function EditProfile() {
       );
       
       setMessage('Profile updated successfully!');
-      // Clear password fields after successful update
+     
       setForm(prev => ({...prev, currentPassword: '', newPassword: '', confirmNewPassword: ''}));
 
     } catch (err) {
@@ -110,14 +128,21 @@ export default function EditProfile() {
     }
   };
 
+  const handleLogout = () => {
+    
+    Cookies.remove('jwt_token');
+    
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header section... no changes here */}
+      
       <header className="flex justify-between items-center px-6 py-4 shadow">
         <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
         <nav className="flex gap-6">
           <a href="#" className="hover:text-red-600" onClick={() => navigate("/home")}>Home</a>
-          <a href="#" className="hover:text-red-600" onClick={() => navigate("/contact")}>Contact</a>
+          <a href="#" className="hover:text-red-600" >Contact</a>
           <a href="#" className="hover:text-red-600" onClick={() => navigate("/about")}>About</a>
         </nav>
         <div className="flex items-center space-x-6">
@@ -126,7 +151,14 @@ export default function EditProfile() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="text-red-600 size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
           </svg>
-          <a onClick={handleLogout}  href='#'><FaSignOutAlt size = {24}/> <a className='text-sm p-2'>Logout</a> </a>
+
+          <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 hover:text-red-600"
+              >
+                <FaSignOutAlt size={22} />
+                <span className="text-sm">Logout</span>
+          </button>
 
         </div>
         
