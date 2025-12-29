@@ -64,15 +64,9 @@ function Home() {
 
     return (
         <div className="font-sans bg-white text-gray-800">
-            <div className="bg-black text-white py-3 text-sm">
-                <div className="container mx-auto flex justify-center items-center px-4">
-                    <p className="flex-grow text-center">
-                        Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%! <a href="#" className="font-semibold underline ml-2">ShopNow</a>
-                    </p>
-                </div>
-            </div>
+            
      
-            <header className="flex justify-between items-center px-6 py-4 shadow">
+            <header className="flex fixed w-full justify-between items-center px-6 py-4 shadow bg-white/30 backdrop-blur-md">
   <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
 
   
@@ -120,7 +114,7 @@ function Home() {
 </header>
 
 
-            <section className="bg-gray-100 flex justify-between items-center p-10">
+            <section className="bg-gray-100 flex justify-between items-center md:p-[80px]">
                 <div>
                     <h2 className="text-lg">Up to 10% Off Voucher</h2>
                     <h1 className="text-3xl font-bold my-2">PlayStation 5</h1>

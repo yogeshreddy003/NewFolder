@@ -74,7 +74,7 @@ const CartPage = () => {
       </header>
 
       
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 ">
         <h1 className="text-3xl font-bold mb-8 text-center">Your Shopping Cart</h1>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -141,7 +141,7 @@ const CartPage = () => {
           </div>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );

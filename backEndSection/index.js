@@ -49,7 +49,7 @@ app.use(cors(corsOptions));
 
 //  ROUTES 
 app.use("/api/user", userRoutes)
-
+app.use("/api/addProduct", productLimiter, productRoutes);
 app.use("/api/products", productLimiter, productRoutes);
 app.use("/api/cart", productLimiter, cartRoutes);
 

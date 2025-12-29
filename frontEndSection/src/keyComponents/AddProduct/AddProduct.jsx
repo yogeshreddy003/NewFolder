@@ -7,12 +7,13 @@ const AddProduct = () => {
     const [name, setName] =useState();
     const [price, setPrice] = useState();
     const [description, setDescription] = useState();
+    const [category, setCategory] = useState();
     const [imageUrl, setImageUrl] = useState();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(`${import.meta.env.VITE_BACKEND_URL}/addproduct`, {name,price , description, imageUrl})
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/addproduct`, {name,price , description,category, imageUrl})
     .then(result => {console.log(result)
 navigate("/home")})
       .catch(err => console.log(err));
@@ -70,6 +71,8 @@ navigate("/home")})
                                 <input type="text" placeholder="Product Name *" className="bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" onChange={(e) => setName(e.target.value)} />
                                 <input type="number" placeholder="Product Price *" className="bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" onChange= {(e)=>setPrice(e.target.value)}  />
                                 <input type="text" placeholder="Product image url *" className="bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" onChange= {(e)=>setImageUrl(e.target.value)}  />
+                                <input type="text" placeholder="Category *" className="bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400" onChange= {(e)=>setCategory(e.target.value)}  />
+                                
                             </div>
                             <div className="mb-6">
                                 <textarea placeholder="Product Description" rows="8" className="w-full bg-gray-100 p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400"  onChange={(e)=>setDescription(e.target.value)}></textarea>
