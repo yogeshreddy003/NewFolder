@@ -1,9 +1,11 @@
 import Cart from "../models/Cart.js";
+
 export const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ userId: req.user._id }).populate({
-      path: "items.productId",
-      model: "product",
+    
+    const cart = await Cart.findOne({ userId: req.user }).populate({
+      path: "items.productId", 
+      
     });
 
     if (!cart) {
@@ -11,6 +13,7 @@ export const getCart = async (req, res) => {
     }
     res.json(cart);
   } catch (error) {
+    console.error(error); 
     res.status(500).json({ message: "Server Error" });
   }
 };

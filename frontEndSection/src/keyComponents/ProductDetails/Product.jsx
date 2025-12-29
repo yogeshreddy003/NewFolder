@@ -1,4 +1,4 @@
-// src/pages/Product.jsx
+
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -62,9 +62,10 @@ const Product = () => {
   const [error, setError] = useState('');
   const [quantity, setQuantity] = useState(1);
 
-  // use context
+  
   const cartContext = useContext(CartContext) || {};
   const { addToCart, showSuccess, fetchCart } = cartContext;
+  const [isAdding, setIsAdding] = useState(false);
 
 
   const { id } = useParams();
@@ -88,19 +89,33 @@ const Product = () => {
     if (id) fetchProduct();
   }, [id]);
 
-  // Optionally refresh cart after adding
+  const { cart } = useContext(CartContext); 
+  const cartItemCount = cart ? cart.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+
   const handleAddToCart = async () => {
-    if (!product || !product._id) return;
-    const success = await addToCart(product._id, quantity);
-    if (success) {
-      // optionally refresh cart data (if needed)
-      if (typeof fetchCart === 'function') fetchCart();
-    } else {
-      // if failed due to not logged in, navigate to login (optional)
-      // you can show a nicer modal/toast here instead
-      alert('Failed to add to cart. Please login and try again.');
+    
+    if (isAdding || !product?._id) return; 
+    
+    setIsAdding(true); 
+
+    try {
+        const success = await addToCart(product._id, quantity);
+        
+        if (success) {
+            
+            if (typeof fetchCart === 'function') {
+                await fetchCart(); 
+            }
+        } else {
+           
+            alert('Failed to add to cart. Please login and try again.');
+        }
+    } catch (error) {
+        console.error("Add to cart error:", error);
+    } finally {
+        setIsAdding(false); 
     }
-  };
+};
 
   if (loading) return <div className="flex justify-center items-center min-h-screen"><p className="text-xl">Loading product details...</p></div>;
   if (error) return <div className="flex justify-center items-center min-h-screen"><p className="text-xl text-red-500">{error}</p></div>;
@@ -108,7 +123,7 @@ const Product = () => {
 
   return (
     <div className="font-sans relative">
-      {/* Success popup (top-right) — uses showSuccess from context */}
+     
       {showSuccess && (
         <div className="fixed top-6 right-6 bg-green-500 text-white px-4 py-3 rounded-full shadow-lg flex items-center gap-2 animate-bounce z-50">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="white">
@@ -135,7 +150,17 @@ const Product = () => {
         </nav>
         <div className="flex items-center space-x-6">
           <a href="#"><FaRegHeart size={22} /></a>
-          <a href="#"><FaShoppingCart size={22} /></a>
+          <button
+                className="relative hover:text-red-600"
+                onClick={() => navigate("/cart")}
+              >
+                <FaShoppingCart size={22} />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

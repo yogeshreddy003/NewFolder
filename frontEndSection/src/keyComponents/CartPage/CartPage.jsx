@@ -11,7 +11,7 @@ const CartPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCart(); // ✔️ fetch ONLY when page loads
+    fetchCart(); 
   }, [fetchCart]);
 
   const subtotal = useMemo(() => {
@@ -49,7 +49,7 @@ const CartPage = () => {
 
   return (
     <div className="font-sans bg-gray-50">
-      {/* HEADER */}
+    
       <header className="flex justify-between items-center px-6 py-4 shadow">
         <h1 className="text-2xl font-bold text-red-600">Exclusive</h1>
         <nav className="flex gap-6">
@@ -73,7 +73,7 @@ const CartPage = () => {
         </div>
       </header>
 
-      {/* MAIN */}
+      
       <main className="container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold mb-8 text-center">Your Shopping Cart</h1>
 

@@ -16,9 +16,9 @@ export const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // 🔐 IMPROVED: Get auth header dynamically
+  
   const getAuthConfig = () => {
-    // Try to get the token from all possible locations
+    
     const token =
       Cookies.get("jwt_token") ||
       localStorage.getItem("token") || 
@@ -36,7 +36,7 @@ export const CartProvider = ({ children }) => {
     };
   };
 
-  // 🛒 Fetch cart
+  
   const fetchCart = useCallback(async () => {
     const config = getAuthConfig();
     if (!config) {
@@ -47,6 +47,7 @@ export const CartProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await axios.get(API_URL, config);
+      console.log(response.data);
       setCart(response.data.data || response.data || { items: [] });
     } catch (err) {
       console.error("Fetch cart failed:", err);
@@ -57,15 +58,15 @@ export const CartProvider = ({ children }) => {
     }
   }, []);
 
-  // ➕ Add to cart
+  
   const addToCart = useCallback(
     async (productId, quantity = 1) => {
-      // Re-fetch config right at the moment of clicking
+      
       const config = getAuthConfig();
       
       if (!config) {
         console.error("Not authenticated - context couldn't find token");
-        return false; // This triggers your "Please Login" alert
+        return false; 
       }
 
       try {
@@ -90,7 +91,7 @@ export const CartProvider = ({ children }) => {
     [fetchCart]
   );
 
-  // ❌ Remove from cart
+  
   const removeFromCart = useCallback(
     async (productId) => {
       const config = getAuthConfig();
@@ -108,7 +109,7 @@ export const CartProvider = ({ children }) => {
     [fetchCart]
   );
 
-  // 🔄 Update quantity
+  
   const updateCartQuantity = useCallback(
     async (productId, quantity) => {
       if (quantity <= 0) {

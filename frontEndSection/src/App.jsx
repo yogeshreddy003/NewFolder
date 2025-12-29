@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// Pages
+
 import About from "./keyComponents/About/About.jsx";
 import Account from "./keyComponents/AccountPage/Account.jsx";
 import AddProduct from "./keyComponents/AddProduct/AddProduct.jsx";
@@ -23,7 +23,7 @@ function App() {
         path="/home"
         element={
           <ProtectedRoute>
-            <HomePage />
+            <HomePage></HomePage>
           </ProtectedRoute>
         }
       />

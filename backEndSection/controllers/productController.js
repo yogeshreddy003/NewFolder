@@ -75,13 +75,14 @@ export const getProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
   try {
    
-    const { name, description, price, imageUrl } = req.body;
+    const { name, description, price, category, imageUrl } = req.body;
     const trimmedName = name ? name.trim() : name;
+    const trimmedCategory = category ? category.trim() : category;
     const trimmedDescription = description ? description.trim() : description;
     const trimmedImageUrl = imageUrl ? imageUrl.trim() : imageUrl;
 
    
-    if (!trimmedName || !trimmedDescription || !price || !trimmedImageUrl) {
+    if (!trimmedName || !trimmedDescription || !price || !trimmedImageUrl || !trimmedCategory) {
       return res.status(400).json({
         success: false,
         message:
@@ -115,6 +116,7 @@ export const createProduct = async (req, res) => {
       name: trimmedName,
       description: trimmedDescription,
       price: numericPrice,
+      category: trimmedCategory,
       imageUrl: trimmedImageUrl,
     });
 

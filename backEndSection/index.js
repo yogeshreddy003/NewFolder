@@ -14,11 +14,8 @@ dotenv.config();
 
 const app = express();
 
-// ** 1. DEFINE YOUR FRONTEND'S URL **
-// Use your deployed frontend URL if you have one, otherwise use your local development URL
 const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
 
-// ** 2. CREATE CORS OPTIONS **
 const corsOptions = {
   origin: [
     "http://localhost:5173",
@@ -27,41 +24,36 @@ const corsOptions = {
     process.env.FRONTEND_URL
   ].filter(Boolean),
   credentials: true,
-  optionsSuccessStatus: 200, // For legacy browser support
+  optionsSuccessStatus: 200, 
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-// ** 3. RATE LIMITERS **
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Max 10 login/signup attempts per 15 mins
-  message: "Too many login attempts, please try again after 15 minutes.",
-});
+
 
 const productLimiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 1000, // Allow 1000 requests per minute
+  windowMs: 1 * 60 * 1000, 
+  max: 1000, 
   message: "Too many requests, please try again later.",
 });
 
 const contactLimiter = rateLimit({
-  windowMs: 10 * 60 * 1000, // 10 minutes
+  windowMs: 10 * 60 * 1000, 
   max: 10,
   message: "Too many contact requests, please try again later.",
 });
 
-// ** 4. MIDDLEWARE **
+
 app.use(express.json());
 app.use(cors(corsOptions));
 
-// ** 5. ROUTES **
+//  ROUTES 
 app.use("/api/user", userRoutes)
 
 app.use("/api/products", productLimiter, productRoutes);
 app.use("/api/cart", productLimiter, cartRoutes);
 
-// ** 6. CONTACT ENDPOINT **
+//  CONTACT ENDPOINT 
 app.post("/api/contact", contactLimiter, async (req, res) => {
   try {
     const contact = await Customer.create(req.body);
@@ -74,7 +66,7 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
   }
 });
 
-// ** 7. DATABASE CONNECTION **
+// DATABASE CONNECTION 
 mongoose
   .connect(process.env.mongodb_url)
   .then(() => console.log("MongoDB connected"))

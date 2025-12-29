@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios'; 
+ 
 
 import { FaRegHeart, FaShoppingCart,FaSignOutAlt } from 'react-icons/fa';
 import Footer from "../../components/Footer.jsx";
@@ -12,34 +12,20 @@ export default function EditProfile() {
     firstName: '',
     lastName: '',
     email: '',
-    address: '',
-    currentPassword: '',
-    newPassword: '',
-    confirmNewPassword: ''
+    
   });
   
-  // 2. ADD STATE FOR MESSAGES AND LOADING
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+ 
+
 
   const navigate = useNavigate();
 
   
 
-  useEffect(() => {
+useEffect(() => {
   const token = Cookies.get("jwt_token");
 
-  // ❌ No token at all
   if (!token) {
-    navigate("/login");
-    return;
-  }
-
-  // ❌ Token exists but is NOT a valid JWT format
-  if (token.split(".").length) {
-    console.error("Invalid JWT format:", token);
-    Cookies.remove("jwt_token");
     navigate("/login");
     return;
   }
@@ -47,20 +33,20 @@ export default function EditProfile() {
   try {
     const decoded = jwtDecode(token);
 
-    const user = decoded.user || decoded;
-
-    if (!user?.email) {
-      throw new Error("Invalid token payload");
+    
+    if (!decoded?.user || !decoded.user.email) {
+      throw new Error("Invalid token structure");
     }
 
-    const fullName = user.name || "";
-    const [firstName = "", lastName = ""] = fullName.split(" ");
+    const { name, email } = decoded.user;
+
+    const [firstName = "", lastName = ""] = (name || "").split(" ");
 
     setForm(prev => ({
       ...prev,
       firstName,
       lastName,
-      email: user.email
+      email
     }));
 
   } catch (err) {
@@ -68,65 +54,12 @@ export default function EditProfile() {
     Cookies.remove("jwt_token");
     navigate("/login");
   }
-}, []);
+}, [navigate]);
 
 
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage('');
-    setError('');
 
-   
-    if (form.newPassword && form.newPassword !== form.confirmNewPassword) {
-      setError("New passwords do not match.");
-      return;
-    }
-
-    setLoading(true);
-    
-    try {
-      const token = Cookies.get('jwt_token');
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      };
-
-      const body = {
-          firstName: form.firstName,
-          lastName: form.lastName,
-          address: form.address,
-      };
-
-      
-      if (form.newPassword && form.currentPassword) {
-          body.newPassword = form.newPassword;
-          body.currentPassword = form.currentPassword;
-      }
-
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
-        body,
-        config
-      );
-      
-      setMessage('Profile updated successfully!');
-     
-      setForm(prev => ({...prev, currentPassword: '', newPassword: '', confirmNewPassword: ''}));
-
-    } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred while updating.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogout = () => {
     
@@ -172,51 +105,16 @@ export default function EditProfile() {
         </div>
         <div className="flex flex-col md:flex-row gap-8 md:gap-12">
           <aside className="w-full md:w-56 mb-8 md:mb-0 text-sm">
-            {/* Aside menu... no changes here */}
+           
           </aside>
           
           <main className="w-full flex-1 bg-white rounded shadow p-4 md:p-8">
-            <h2 className="text-lg font-semibold mb-6 text-red-500">Edit Your Profile</h2>
             
-            {/* 4. DISPLAY SUCCESS AND ERROR MESSAGES */}
-            {message && <div className="mb-4 text-center p-2 rounded bg-green-100 text-green-800">{message}</div>}
-            {error && <div className="mb-4 text-center p-2 rounded bg-red-100 text-red-800">{error}</div>}
             
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">First Name</label>
-                <input type="text" name="firstName" value={form.firstName} onChange={handleChange} className="bg-gray-100 border rounded w-full px-4 py-2" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Last Name</label>
-                <input type="text" name="lastName" value={form.lastName} onChange={handleChange} className="bg-gray-100 border rounded w-full px-4 py-2" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input type="email" name="email" value={form.email} readOnly className="bg-gray-200 border rounded w-full px-4 py-2 cursor-not-allowed" />
-              </div>
-              
-              
-              <div className="col-span-1 md:col-span-2 mt-2">
-                <h3 className="text-base font-semibold mb-4 text-gray-700">Password Changes</h3>
-                <div className="mb-4">
-                  <input type="password" name="currentPassword" value={form.currentPassword} onChange={handleChange} placeholder="Current Password" className="bg-gray-100 border rounded w-full px-4 py-2" />
-                </div>
-                <div className="mb-4">
-                  <input type="password" name="newPassword" value={form.newPassword} onChange={handleChange} placeholder="New Password" className="bg-gray-100 border rounded w-full px-4 py-2" />
-                </div>
-                <div className="mb-6">
-                  <input type="password" name="confirmNewPassword" value={form.confirmNewPassword} onChange={handleChange} placeholder="Confirm New Password" className="bg-gray-100 border rounded w-full px-4 py-2" />
-                </div>
-              </div>
-              
-              <div className="col-span-1 md:col-span-2 flex justify-end gap-4">
-                <button type="button" className="py-2 px-6 rounded border border-gray-400 text-gray-700 font-medium bg-white hover:bg-gray-100 transition" onClick={() => navigate('/home')}>Cancel</button>
-                <button type="submit" disabled={loading} className="py-2 px-6 rounded bg-red-500 text-white font-semibold hover:bg-red-600 transition disabled:bg-gray-400">
-                  {loading ? 'Saving...' : 'Save Changes'}
-                </button>
-              </div>
-            </form>
+            
+            
+            
+            
           </main>
         </div>
       </div>
